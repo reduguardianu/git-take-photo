@@ -6,4 +6,4 @@ Project allowing to take photo on thin client and send it to machine you actuall
 You need to run main.py without remote option
 
 ## Workstation side
-You need to set thin client IP and port on which app is running
+You need to set thin client IP and port on which app is running via *--remote* option of main program
