@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-from cv2 import VideoCapture, imencode
+from cv2 import VideoCapture, imencode, CAP_PROP_AUTO_EXPOSURE
 from linuxpy.video.device import iter_video_capture_devices
 
 def takePhotoOnDevice(priorities):
     cameraIndex = find_camera_index(priorities)
     camera = VideoCapture(cameraIndex)
+    camera.set(CAP_PROP_AUTO_EXPOSURE, 3)
     result, image = camera.read()
     camera.release()
     camera2 = VideoCapture(cameraIndex)
+    camera2.set(CAP_PROP_AUTO_EXPOSURE, 3)
     result, image2 = camera2.read()
     camera2.release()
     if result:
