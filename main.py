@@ -27,7 +27,7 @@ class GitPhotoRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(photo)
 
     def getPhoto(self):
-        if self.connected:
+        if not self.connected:
             return takePhotoOnDevice(self.cameraPriorities)
         return self.getPhotoFromServer()
 
@@ -48,7 +48,7 @@ class GitPhotoRequestServer(HTTPServer):
         super().__init__(("127.0.0.1", localServerPort), partial(GitPhotoRequestHandler, self.getContext))
 
     def getContext(self):
-        return {'connected': True, 'cameraPriorities': self.cameraPriorities, 'address': self.photoServerAddress}
+        return {'connected': self.connected, 'cameraPriorities': self.cameraPriorities, 'address': self.photoServerAddress}
 
     def checkConnection(self):
         if self.photoServerAddress is None:
@@ -56,7 +56,9 @@ class GitPhotoRequestServer(HTTPServer):
         try:
             reply = requests.get(self.photoServerAddress + "/healthCheck")
             self.connected = reply.status_code == 200
-        except:
+            print(self.connected)
+        except Exception as e:
+            print(e)
             self.connected = False
 
     def getTime(self):
